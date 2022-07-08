@@ -1,0 +1,5 @@
+<http://example/A> <http://example.com/foo> _:c14n0 .
+_:c14n0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:c14n1 .
+_:c14n0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+_:c14n1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> "baz" .
+_:c14n1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .

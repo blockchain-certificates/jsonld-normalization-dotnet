@@ -1,0 +1,8 @@
+_:c14n0 <http://example/label> "Object with @type <foo>" .
+_:c14n0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/bar> .
+_:c14n0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/foo> .
+_:c14n1 <http://example/typemap> _:c14n0 .
+_:c14n1 <http://example/typemap> _:c14n2 .
+_:c14n2 <http://example/label> "Object with @type _:bar" .
+_:c14n2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> _:c14n3 .
+_:c14n2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> _:c14n4 .

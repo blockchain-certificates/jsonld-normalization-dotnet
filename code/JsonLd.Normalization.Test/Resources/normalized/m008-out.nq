@@ -1,0 +1,3 @@
+_:c14n0 <http://example.org/a> "Object with @type <Type>" .
+_:c14n0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example/Type> .
+_:c14n1 <http://example/typemap> _:c14n0 .

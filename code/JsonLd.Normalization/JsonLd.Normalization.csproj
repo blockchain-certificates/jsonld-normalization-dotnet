@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	<TargetFramework>net6.0</TargetFramework>
+	<Company>Hyland</Company>
+	<Authors>Trusted Documents</Authors>
+	<ApplicationIcon />
+	<RepositoryUrl>https://github.com/learningmachine/lib-document-hash-generator</RepositoryUrl>
+	<Version>1.0.1</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+
+</Project>

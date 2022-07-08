@@ -1,0 +1,7 @@
+_:c14n0 <http://example/base-prop> "baz" .
+_:c14n1 <http://example/bar> _:c14n3 .
+_:c14n1 <http://example/baz> _:c14n0 .
+_:c14n1 <http://example/foo> _:c14n2 .
+_:c14n1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example/Type> .
+_:c14n2 <http://example/foo-prop> "foo" .
+_:c14n3 <http://example/bar-prop> "bar" .

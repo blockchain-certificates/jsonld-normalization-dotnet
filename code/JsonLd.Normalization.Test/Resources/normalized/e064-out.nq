@@ -1,0 +1,5 @@
+<http://example.com/people/markus> <http://xmlns.com/foaf/0.1/name> "Markus Lanthaler" .
+_:c14n0 <http://xmlns.com/foaf/0.1/knows> <http://example.com/people/markus> .
+_:c14n0 <http://xmlns.com/foaf/0.1/name> "Gregg Kellogg" .
+_:c14n1 <http://xmlns.com/foaf/0.1/knows> <http://example.com/people/markus> .
+_:c14n1 <http://xmlns.com/foaf/0.1/name> "Dave Longley" .

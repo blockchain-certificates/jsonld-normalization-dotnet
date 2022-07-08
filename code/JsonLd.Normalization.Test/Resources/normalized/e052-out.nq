@@ -1,0 +1,2 @@
+_:c14n0 <http://example.org/property> "ok" .
+_:c14n0 <http://example.org/vocabRelativeProperty> "must expand to http://example.org/vocabRelativeProperty" .

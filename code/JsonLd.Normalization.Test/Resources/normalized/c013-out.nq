@@ -1,0 +1,6 @@
+<http://example/inner-with-index> <http://example/inner-foo> "inner-foo" .
+_:c14n0 <http://example/base-foo> "base-foo" .
+_:c14n0 <http://example/outer-prop> _:c14n1 .
+_:c14n0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example/Outer> .
+_:c14n1 <http://example/prop> <http://example/inner-with-index> .
+_:c14n1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example/Inner> .

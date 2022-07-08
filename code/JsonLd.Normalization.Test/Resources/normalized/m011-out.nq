@@ -1,0 +1,4 @@
+_:c14n0 <http://example/label> "Another object with no @id" .
+_:c14n1 <http://example/idmap> _:c14n0 .
+_:c14n1 <http://example/idmap> _:c14n2 .
+_:c14n2 <http://example/label> "Object with no @id" .

@@ -1,0 +1,7 @@
+_:c14n0 <ex:bar> <http://example/a> .
+_:c14n0 <ex:bar> <http://example/b> .
+_:c14n0 <ex:foo> "1" .
+_:c14n0 <ex:foo> "2"^^<ex:Number> .
+_:c14n0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <ex:Inner> .
+_:c14n1 <ex:nested> _:c14n0 .
+_:c14n1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <ex:Outer> .

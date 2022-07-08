@@ -1,0 +1,4 @@
+_:c14n0 <http://example.com/number> "0"^^<http://www.w3.org/2001/XMLSchema#integer> .
+_:c14n0 <http://example.com/number> "1.0E21"^^<http://www.w3.org/2001/XMLSchema#double> .
+_:c14n0 <http://example.com/number> "8"^^<http://www.w3.org/2001/XMLSchema#integer> .
+_:c14n0 <http://example.com/number> "9.9E0"^^<http://www.w3.org/2001/XMLSchema#double> .

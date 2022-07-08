@@ -1,0 +1,3 @@
+_:c14n0 <ex:protected3> "p === ex:protected3" .
+_:c14n1 <ex:protected1> "p === ex:protected1" .
+_:c14n1 <ex:protected2> _:c14n0 .

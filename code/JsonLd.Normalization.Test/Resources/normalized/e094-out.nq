@@ -1,0 +1,4 @@
+_:c14n0 <foo:input> _:c14n2 .
+_:c14n0 <foo:input> _:c14n3 .
+_:c14n1 <foo:value> "y" _:c14n2 .
+_:c14n4 <foo:value> "x" _:c14n3 .

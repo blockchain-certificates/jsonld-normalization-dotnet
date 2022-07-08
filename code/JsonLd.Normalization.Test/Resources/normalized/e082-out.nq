@@ -1,0 +1,2 @@
+_:c14n1 <http://example.org/value> "x" _:c14n0 .
+_:c14n2 <http://example.org/input> _:c14n0 .

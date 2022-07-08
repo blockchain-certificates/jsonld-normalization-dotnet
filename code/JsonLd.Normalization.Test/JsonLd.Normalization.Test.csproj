@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netcoreapp6.0</TargetFramework>
+
+		<IsPackable>false</IsPackable>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="Resources\blockcerts_v3.json" />
+	  <EmbeddedResource Include="Resources\normalized\blockcerts_v3.nq" />
+	  <EmbeddedResource Include="Resources\blockcerts_v3_alt.json" />
+    
+    <EmbeddedResource Include="Resources\*-in.jsonld">
+      <Link>Resources\%(FileName)%(Extension)</Link>
+      <LogicalName>JsonLd.Normalization.Test.Resources\%(FileName)%(Extension)</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\normalized\*-out.nq">
+      <Link>Resources\normalized\%(FileName)%(Extension)</Link>
+      <LogicalName>JsonLd.Normalization.Test.Resources.normalized\%(FileName)%(Extension)</LogicalName>
+    </EmbeddedResource>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
+		<PackageReference Include="Moq" Version="4.18.1" />
+		<PackageReference Include="NUnit" Version="3.13.3" />
+		<PackageReference Include="NUnit3TestAdapter" Version="4.2.1" />
+		<PackageReference Include="coverlet.collector" Version="3.1.2">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\JsonLd.Normalization\JsonLd.Normalization.csproj" />
+	</ItemGroup>
+
+</Project>

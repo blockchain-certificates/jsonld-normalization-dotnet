@@ -1,0 +1,3 @@
+_:c14n0 <http://example/baz> _:c14n1 .
+_:c14n1 <http://example/baz> "buzz" .
+_:c14n2 <http://example/bar> _:c14n0 .

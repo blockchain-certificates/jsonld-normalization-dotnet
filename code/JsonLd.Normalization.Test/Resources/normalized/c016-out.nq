@@ -1,0 +1,6 @@
+_:c14n0 <http://example.org/foo> "org" .
+_:c14n0 <http://example.org/p> _:c14n2 .
+_:c14n1 <http://example.org/nested-prop> "org" .
+_:c14n2 <http://example.com/foo> "com" .
+_:c14n2 <http://example.com/nested> _:c14n1 .
+_:c14n2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/Type> .

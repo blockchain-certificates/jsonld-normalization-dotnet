@@ -1,0 +1,4 @@
+_:c14n0 <http://example.com/something-else> "property http://example.com/something-else" .
+_:c14n1 <http://example.com/protected> "true"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+_:c14n1 <http://example.com/scope> _:c14n0 .
+_:c14n1 <http://example.com/unprotected> "true"^^<http://www.w3.org/2001/XMLSchema#boolean> .

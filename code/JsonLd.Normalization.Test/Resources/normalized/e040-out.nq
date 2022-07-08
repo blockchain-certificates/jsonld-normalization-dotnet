@@ -1,0 +1,3 @@
+<http://example.com/queen> <http://example.com/vocab/index> "No" .
+<http://example.com/queen> <http://example.com/vocab/index> "indexes" .
+<http://example.com/queen> <http://example.com/vocab/label> "The Queen" .

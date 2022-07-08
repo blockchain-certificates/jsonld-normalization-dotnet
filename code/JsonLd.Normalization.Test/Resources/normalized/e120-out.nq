@@ -1,0 +1,3 @@
+_:c14n0 <http://example.orb/vocab/@> "allowed" .
+_:c14n0 <http://example.orb/vocab/@foo.bar> "allowed" .
+_:c14n0 <http://example.orb/vocab/ignoreMe> "resolves to @vocab" .
