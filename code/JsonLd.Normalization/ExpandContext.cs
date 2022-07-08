@@ -1,8 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json;
 
 namespace JsonLd.Normalization
 {
@@ -13,10 +11,6 @@ namespace JsonLd.Normalization
         public object Inverse { get; set; }
         public Dictionary<string, JToken> Fields { get; init; } = new();
         public ExpandContext PreviousContext { get; set; }
-
-        public ExpandContext()
-        {
-        }
 
         public object CreateInverseContext()
         {

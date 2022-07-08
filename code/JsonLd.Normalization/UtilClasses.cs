@@ -7,6 +7,16 @@ using System.Text;
 
 namespace JsonLd.Normalization
 {
+    internal record IriRelativeTo
+    {
+        public static readonly IriRelativeTo BaseSet = new IriRelativeTo { Base = true };
+        public static readonly IriRelativeTo VocabSet = new IriRelativeTo { Vocab = true };
+        public static readonly IriRelativeTo BothSet = new IriRelativeTo { Base = true, Vocab = true };
+
+        public bool Base = false;
+        public bool Vocab = false;
+    }
+
     internal class BlankNodeInfo
     {
         public HashSet<Quad> Quads { get; set; }

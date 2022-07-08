@@ -1,8 +1,7 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -11,46 +10,14 @@ namespace JsonLd.Normalization
 {
     internal class Expansion
     {
-        public static async Task<JToken> Expand(string json)
-        {
-            var activeCtx = new ExpandContext();
-            var token = JToken.Parse(json);
-            var objects = new List<JObject>();
-            if (token.Type == JTokenType.Array)
-                objects.AddRange(token.ToArray().Where(t => t.Type == JTokenType.Object).Cast<JObject>());
-            if (token.Type == JTokenType.Object)
-                objects.Add((JObject)token);
-            var result = new JArray();
-            foreach (var doc in objects)
-            {
-                var options = new Dictionary<string, object>();
-                options["contextResolver"] = new ContextResolver();
-
-                var expanded = await DoExpand(activeCtx, doc, null, options);
-
-                // optimize away @graph with no other properties
-                if (expanded?.Type == JTokenType.Object)
-                {
-                    var expandedObj = (JObject)expanded;
-                    if (expandedObj.TryGetValue("@graph", out var graphProp) && expandedObj.Properties().Count() == 1)
-                        expanded = graphProp;
-                }
-                
-                if (expanded != null)
-                    result.Add(expanded);
-            }
-
-            return result;
-        }
-
-        private static async Task<JToken> DoExpand(ExpandContext activeCtx,
-                                                   JToken element,
-                                                   string activeProperty = null,
-                                                   Dictionary<string, object> options = null,
-                                                   bool insideList = false,
-                                                   bool insideIndex = false,
-                                                   ExpandContext typeScopedContext = null,
-                                                   Func<object, JToken> expansionMap = null)
+        public static async Task<JToken> Expand(ExpandContext activeCtx,
+                                                JToken element,
+                                                string activeProperty = null,
+                                                Dictionary<string, object> options = null,
+                                                bool insideList = false,
+                                                bool insideIndex = false,
+                                                ExpandContext typeScopedContext = null,
+                                                Func<object, JToken> expansionMap = null)
         {
             if (Utils.IsEmptyObject(element))
                 return null;
@@ -86,7 +53,7 @@ namespace JsonLd.Normalization
                 for (int i = 0; i < elementArray.Length; ++i)
                 {
                     // expand element
-                    var e = await DoExpand(activeCtx, elementArray[i], activeProperty, options,
+                    var e = await Expand(activeCtx, elementArray[i], activeProperty, options,
                                            false, insideIndex, typeScopedContext, expansionMap);
                     if (insideList && e?.Type == JTokenType.Array)
                     {
@@ -1293,7 +1260,7 @@ namespace JsonLd.Normalization
                 // For 1.0, it is skipped as are other unknown keywords
                 if (expandedProperty == "@included")// && _processingMode(activeCtx, 1.1))
                 {
-                    var includedResult = Utils.AsArray(await DoExpand(activeCtx, value, activeProperty,
+                    var includedResult = Utils.AsArray(await Expand(activeCtx, value, activeProperty,
                                                                       options, expansionMap: expansionMap));
 
                     // Expanded values must be node objects
@@ -1392,7 +1359,7 @@ namespace JsonLd.Normalization
                     if (value.Type != JTokenType.Object)
                         throw new JsonLdParseException("Invalid JSON-LD syntax; \"@reverse\" value must be an object.");
 
-                    expandedValue = await DoExpand(activeCtx, value, "@reverse", options, expansionMap: expansionMap);
+                    expandedValue = await Expand(activeCtx, value, "@reverse", options, expansionMap: expansionMap);
                     // properties double-reversed
                     if (expandedValue.Type == JTokenType.Object &&
                         ((JObject)expandedValue).TryGetValue("@reverse", out var reverseProp) &&
@@ -1491,7 +1458,7 @@ namespace JsonLd.Normalization
                         if (isList && expandedActiveProperty == "@graph")
                             nextActiveProperty = null;
 
-                        expandedValue = await DoExpand(termCtx, value, nextActiveProperty, options, isList,
+                        expandedValue = await Expand(termCtx, value, nextActiveProperty, options, isList,
                                                        expansionMap: expansionMap);
                     }
                     else if (JToken.EqualityComparer.Equals(GetContextValue(activeCtx, prop.Name, "@type"), "@json"))
@@ -1503,7 +1470,7 @@ namespace JsonLd.Normalization
                     else
                     {
                         // recursively expand value with key as new active property
-                        expandedValue = await DoExpand(termCtx, value, prop.Name, options, false, expansionMap: expansionMap);
+                        expandedValue = await Expand(termCtx, value, prop.Name, options, false, expansionMap: expansionMap);
                     }
                 }
 
@@ -1701,7 +1668,7 @@ namespace JsonLd.Normalization
                             activeCtx = await ProcessContext(activeCtx, ctx, false, false, options);
                     }
 
-                    var val = await DoExpand(activeCtx, Utils.AsArray(prop.Value), activeProperty, options,
+                    var val = await Expand(activeCtx, Utils.AsArray(prop.Value), activeProperty, options,
                                              false, true, expansionMap: expansionMap);
 
                     // expand for @type, but also for @none
