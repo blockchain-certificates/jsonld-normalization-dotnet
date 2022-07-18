@@ -1,4 +1,8 @@
-﻿using Newtonsoft.Json.Linq;
+﻿/**
+ * Parts of the source code in this file has been translated/ported from jsonld.js library by Digital Bazaar (BSD 3-Clause license)
+*/
+
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 

@@ -1,4 +1,8 @@
-﻿using System;
+﻿/**
+ * Parts of the source code in this file has been translated/ported from rdf-canonize library by Digital Bazaar (BSD 3-Clause license)
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +13,7 @@ namespace JsonLd.Normalization
     internal static class URDNA2015
     {
         /// <summary>
-        /// Implements RDF Dataset Normalization Algorithm, code is translated from rdf-canonize javascript package version 1.0.1
+        /// Implements RDF Dataset Normalization Algorithm, code is translated from rdf-canonize javascript package version 3.0.0
         /// </summary>
         /// <param name="dataset">a list of Quad objects to be normalized</param>
         /// <returns>normalized dataset as a string</returns>

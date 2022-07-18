@@ -1,4 +1,7 @@
-﻿using JsonLd.Normalization;
+﻿/**
+ * Parts of the source code in this file has been translated/ported from rdf-canonize library by Digital Bazaar (BSD 3-Clause license)
+*/
+
 using System;
 using System.Collections.Generic;
 using System.Linq;

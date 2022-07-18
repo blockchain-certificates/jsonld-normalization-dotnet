@@ -1,3 +1,7 @@
+﻿/**
+ * Parts of the source code in this file has been translated/ported from rdf-canonize library by Digital Bazaar (BSD 3-Clause license)
+*/
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,13 +17,13 @@ namespace JsonLd.Normalization
 
 
         /**
-* Creates a new IdentifierIssuer. A IdentifierIssuer issues unique
-* identifiers, keeping track of any previously issued identifiers.
-*
-* @param prefix the prefix to use ('<prefix><counter>').
-* @param existing an existing Map to use.
-* @param counter the counter to use.
-*/
+        * Creates a new IdentifierIssuer. A IdentifierIssuer issues unique
+        * identifiers, keeping track of any previously issued identifiers.
+        *
+        * @param prefix the prefix to use ('<prefix><counter>').
+        * @param existing an existing Map to use.
+        * @param counter the counter to use.
+        */
         public IdentifierIssuer(string prefix, OrderedDictionary existing = null, int counter = 0)
         {
             this.Prefix = prefix;
