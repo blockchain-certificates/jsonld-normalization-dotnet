@@ -12,10 +12,11 @@ namespace JsonLd.Normalization
         /// the same as Normalize
         /// </summary>
         /// <param name="json">serialized json document</param>
+        /// <param name="options">options to be used during the process</param>
         /// <returns>normalized n-quads document as string</returns>
-        public static async Task<string> Canonize(string json)
+        public static async Task<string> Canonize(string json, ExpandOptions options = null)
         {
-            return await Normalize(json);
+            return await Normalize(json, options);
         }
 
         /// <summary>
@@ -23,20 +24,21 @@ namespace JsonLd.Normalization
         /// the same as Canonize
         /// </summary>
         /// <param name="json">serialized json document</param>
+        /// <param name="options">options to be used during the process</param>
         /// <returns>normalized n-quads document as string</returns>
-        public static async Task<string> Normalize(string json)
+        public static async Task<string> Normalize(string json, ExpandOptions options = null)
         {
-            var dataset = await ToRDF(json);
+            var dataset = await ToRDF(json, options);
             return URDNA2015.Normalize(dataset);
         }
 
-        private static async Task<List<Quad>> ToRDF(string json)
+        private static async Task<List<Quad>> ToRDF(string json, ExpandOptions options = null)
         {
-            var expanded = await Expand(json);
+            var expanded = await Expand(json, options);
             return expanded.ToRDF();
         }
 
-        private static async Task<JToken> Expand(string json)
+        private static async Task<JToken> Expand(string json, ExpandOptions options = null)
         {
             var activeCtx = new ExpandContext();
             var token = JToken.Parse(json);
@@ -48,9 +50,7 @@ namespace JsonLd.Normalization
             var result = new JArray();
             foreach (var doc in objects)
             {
-                var options = new Dictionary<string, object>();
-                options["contextResolver"] = new ContextResolver();
-
+                options ??= new();
                 var expanded = await Expansion.Expand(activeCtx, doc, null, options);
 
                 // optimize away @graph with no other properties

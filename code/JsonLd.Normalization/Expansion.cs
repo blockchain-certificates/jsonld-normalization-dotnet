@@ -17,7 +17,7 @@ namespace JsonLd.Normalization
         public static async Task<JToken> Expand(ExpandContext activeCtx,
                                                 JToken element,
                                                 string activeProperty = null,
-                                                Dictionary<string, object> options = null,
+                                                ExpandOptions options = null,
                                                 bool insideList = false,
                                                 bool insideIndex = false,
                                                 ExpandContext typeScopedContext = null,
@@ -297,8 +297,7 @@ namespace JsonLd.Normalization
 
             // drop certain top-level objects that do not occur in lists, unless custom
             // mapped
-            if (rval is not null &&
-                !GetOption(options, "keepFreeFloatingNodes", false) && !insideList &&
+            if (rval is not null && !(options?.KeepFreeFloatingNodes ?? false) && !insideList &&
                 (activeProperty == null || expandedActiveProperty == "@graph"))
             {
                 // drop empty object, top-level @value/@list, or object with only @id
@@ -322,7 +321,7 @@ namespace JsonLd.Normalization
         }
 
         private static async Task<ExpandContext> ProcessContext(ExpandContext activeCtx, JToken localCtx, bool propagate,
-                                                                bool overrideProtected, Dictionary<string, object> options,
+                                                                bool overrideProtected, ExpandOptions options,
                                                                 HashSet<object> cycles = null)
         {
             cycles ??= new();
@@ -333,8 +332,8 @@ namespace JsonLd.Normalization
             if (!ctxs.Any())
                 return activeCtx;
 
-            var baseUrl = GetOption<string>(options, "base");
-            var contextResolver = GetOption<ContextResolver>(options, "contextResolver");
+            var baseUrl = options.Base;
+            var contextResolver = options.ContextResolver;
 
             // resolve contexts
             var resolved = await contextResolver.Resolve(activeCtx, localCtx, baseUrl);
@@ -373,7 +372,7 @@ namespace JsonLd.Normalization
                     // not allowing overrides (e.g. processing a property term scoped context)
                     if (!overrideProtected && activeCtx.Protected.Any())
                     {
-                        var protectedMode = GetOption<string>(options, "protectedMode") ?? "error";
+                        var protectedMode = options.ProtectedMode ?? "error";
                         if (protectedMode == "error")
                             throw new JsonLdParseException("Tried to nullify a context with protected terms outside of a term definition.");
                         else if (protectedMode == "warn")
@@ -672,7 +671,7 @@ namespace JsonLd.Normalization
         }
 
         private static void CreateTermDefinition(ExpandContext activeCtx, JObject localCtx, string term,
-                                                 Dictionary<string, bool> defined, Dictionary<string, object> options,
+                                                 Dictionary<string, bool> defined, ExpandOptions options,
                                                  bool overrideProtected = false)
         {
             if (String.IsNullOrEmpty(term))
@@ -1104,7 +1103,7 @@ namespace JsonLd.Normalization
                 mapping["protected"] = true;
                 if (!JToken.DeepEquals(previousMapping, mapping))
                 {
-                    var protectedMode = GetOption<string>(options, "protectedMode") ?? "error";
+                    var protectedMode = options.ProtectedMode ?? "error";
                     if (protectedMode == "error")
                     {
                         throw new JsonLdParseException($"Invalid JSON - LD syntax; tried to redefine \"{term}\" " +
@@ -1122,7 +1121,7 @@ namespace JsonLd.Normalization
         }
 
         private static async Task ExpandObject(ExpandContext activeCtx, string activeProperty, string expandedActiveProperty,
-                                               JObject element, JObject expandedParent, Dictionary<string, object> options,
+                                               JObject element, JObject expandedParent, ExpandOptions options,
                                                bool insideList, string typeKey, ExpandContext typeScopedContext,
                                                Func<object, JToken> expansionMap)
         {
@@ -1130,7 +1129,7 @@ namespace JsonLd.Normalization
             var nests = new List<string>();
             JToken unexpandedValue = null;
 
-            bool isFrame = GetOption<bool>(options, "isFrame");
+            bool isFrame = options.IsFrame;
 
             var elementTypeKeyProp = typeKey is not null ? element[typeKey] : null;
             var elementTypeKey = elementTypeKeyProp?.Type == JTokenType.Array ? ((JArray)elementTypeKeyProp)[0] : elementTypeKeyProp;
@@ -1616,7 +1615,7 @@ namespace JsonLd.Normalization
         }
 
         private static JArray ExpandLanguageMap(ExpandContext activeCtx, JToken languageMap, JToken direction,
-                                                Dictionary<string, object> options)
+                                                ExpandOptions options)
         {
             var rval = new JArray();
             if (languageMap.Type == JTokenType.Object)
@@ -1655,7 +1654,7 @@ namespace JsonLd.Normalization
 
         private static async Task<JArray> ExpandIndexMap(ExpandContext activeCtx, string activeProperty, JToken value,
                                                          Func<object, JToken> expansionMap, bool asGraph,
-                                                         string indexKey, string propertyIndex, Dictionary<string, object> options)
+                                                         string indexKey, string propertyIndex, ExpandOptions options)
         {
             var rval = new JArray();
             if (value.Type == JTokenType.Object)
@@ -1770,7 +1769,7 @@ namespace JsonLd.Normalization
 
         private static string ExpandIri(ExpandContext activeCtx, string value, IriRelativeTo relativeTo = null,
                                         JObject localCtx = null, Dictionary<string, bool> defined = null,
-                                        Dictionary<string, object> options = null)
+                                        ExpandOptions options = null)
         {
             // already expanded
             if (value == null || Utils.IsKeyword(value))
@@ -1837,18 +1836,18 @@ namespace JsonLd.Normalization
             {
                 var baseVal = baseValProp?.ToString();
                 if (!String.IsNullOrEmpty(baseVal)) // The null case preserves value as potentially relative                    
-                    return Utils.PrependBase(Utils.PrependBase(GetOption<string>(options, "base"), baseVal), value);
+                    return Utils.PrependBase(Utils.PrependBase(options.Base, baseVal), value);
             }
             else if (relativeTo.Base)
             {
-                return Utils.PrependBase(GetOption<string>(options, "base"), value);
+                return Utils.PrependBase(options.Base, value);
             }
 
             return value;
         }
 
         private static JToken ExpandValue(ExpandContext activeCtx, JToken value, string activeProperty = null,
-                                          Dictionary<string, object> options = null)
+                                          ExpandOptions options = null)
         {
             // nothing to expand
             if (Utils.IsEmptyObject(value))
@@ -1942,13 +1941,6 @@ namespace JsonLd.Normalization
                 return ctxTypeVal;
 
             return null;
-        }
-
-        private static T GetOption<T>(Dictionary<string, object> options, string key, T defVal = default)
-        {
-            if (options is not null && options.TryGetValue(key, out var obj) && obj is T val)
-                return val;
-            return defVal;
         }
     }
 }

@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace JsonLd.Normalization
 {
-    internal class ExpandContext
+    public class ExpandContext
     {
         public Dictionary<string, JObject> Mappings { get; init; } = new();
         public Dictionary<string, bool> Protected { get; init; } = new();

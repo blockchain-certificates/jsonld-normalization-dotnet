@@ -13,10 +13,15 @@ using System.Threading.Tasks;
 
 namespace JsonLd.Normalization
 {
-    internal class ResolvedContext
+    public interface IContextResolver
+    {
+        Task<List<ResolvedContext>> Resolve(ExpandContext activeCtx, JToken context, string baseUrl);
+    }
+
+    public class ResolvedContext
     {
         public JToken Document { get; init; }
-        public Dictionary<ExpandContext, ExpandContext> Cache { get; init; } = new();
+        protected Dictionary<ExpandContext, ExpandContext> Cache { get; init; } = new();
 
         public ResolvedContext(JToken document)
         {
@@ -38,7 +43,7 @@ namespace JsonLd.Normalization
         }
     };
 
-    internal class ContextResolver
+    public class ContextResolver : IContextResolver
     {
         private static ConcurrentDictionary<string, (string, string, DateTime)> documentCache = new();
         private static readonly TimeSpan CACHE_TIMEOUT = TimeSpan.FromMinutes(5);
@@ -46,8 +51,12 @@ namespace JsonLd.Normalization
         const int MAX_CONTEXT_URLS = 10;
         const int MAX_REDIRECTS = 10;
 
-        public async Task<List<ResolvedContext>> Resolve(ExpandContext activeCtx, JToken context,
-                                                         string baseUrl, HashSet<object> cycles = null)
+        public async Task<List<ResolvedContext>> Resolve(ExpandContext activeCtx, JToken context, string baseUrl)
+        {
+            return await Resolve(activeCtx, context, baseUrl, null);
+        }
+        public async Task<List<ResolvedContext>> Resolve(ExpandContext activeCtx, JToken context, 
+                                                         string baseUrl, HashSet<object> cycles)
         {
             cycles ??= new();
 

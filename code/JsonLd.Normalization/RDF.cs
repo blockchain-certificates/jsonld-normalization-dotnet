@@ -136,7 +136,8 @@ namespace JsonLd.Normalization
             if (!subjects.TryGetValue(name, out var subjectProp) || subjectProp.Type != JTokenType.Object)
             {
                 subjectProp = new JObject();
-                subjects[name] = subjectProp;
+                if (name is not null)
+                    subjects[name] = subjectProp;
             }
             var subject = (JObject)subjectProp;
             subject["@id"] = name;
@@ -185,7 +186,7 @@ namespace JsonLd.Normalization
                 if (property == "@graph")
                 {
                     // add graph subjects map entry
-                    if (!graphs.ContainsKey(name))
+                    if (name is not null && !graphs.ContainsKey(name))
                         graphs[name] = new JObject();
 
                     CreateNodeMap(prop.Value, graphs, name, issuer);
