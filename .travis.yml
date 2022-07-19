@@ -1,0 +1,7 @@
+language: csharp
+mono: none
+dotnet: 6.0.7
+soluion: code/JsonLd.Normalization.sln
+script:
+  - dotnet restore
+  - dotnet test
