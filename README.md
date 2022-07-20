@@ -9,6 +9,7 @@ It is based on [jsonld.js](https://github.com/digitalbazaar/jsonld.js) library, 
 Main entry point is `JsonLd` class, which exposes `Canonize` and `Normalize` functions, which transform input JSON-LD document to a canonized/normalized form. 
 This can later be used e.g. for hashing in order to have consistent and reproducible hash values regardless of insignificant differences like fields ordering.
 Both "Normalization" and "Canonization" names are used interchangeably in this context, so the two functions have the same effect.
+An optional `ExpandOptions options` parameter can be used to customize parts of the JSON-LD document process.
 
 ### Example
 

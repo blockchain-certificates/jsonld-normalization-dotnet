@@ -1,4 +1,8 @@
-﻿using Newtonsoft.Json.Linq;
+﻿/**
+ * Parts of the source code in this file has been translated/ported from jsonld.js library by Digital Bazaar (BSD 3-Clause license)
+*/
+
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,7 +16,7 @@ namespace JsonLd.Normalization
         /// the same as Normalize
         /// </summary>
         /// <param name="json">serialized json document</param>
-        /// <param name="options">options to be used during the process</param>
+        /// <param name="options">options to be used during the document expansion process</param>
         /// <returns>normalized n-quads document as string</returns>
         public static async Task<string> Canonize(string json, ExpandOptions options = null)
         {
@@ -24,7 +28,7 @@ namespace JsonLd.Normalization
         /// the same as Canonize
         /// </summary>
         /// <param name="json">serialized json document</param>
-        /// <param name="options">options to be used during the process</param>
+        /// <param name="options">options to be used during the document expansion process</param>
         /// <returns>normalized n-quads document as string</returns>
         public static async Task<string> Normalize(string json, ExpandOptions options = null)
         {
