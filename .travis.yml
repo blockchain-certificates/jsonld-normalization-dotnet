@@ -1,7 +1,10 @@
 language: csharp
 mono: none
 dotnet: 6.0.302
-soluion: code/JsonLd.Normalization.sln
+env: 
+  - SLN_FILE="code/JsonLd.Normalization.sln"
+before_script:
+  - dotnet restore $SLN_FILE --locked-mode
 script:
-  - dotnet restore
-  - dotnet test
+  - dotnet build $SLN_FILE --no-restore -c Release
+  - dotnet test $SLN_FILE --no-restore --no-build -c Release
