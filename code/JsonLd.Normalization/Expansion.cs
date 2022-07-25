@@ -816,7 +816,7 @@ namespace JsonLd.Normalization
                         }
 
                         // if term has the form of an IRI it must map the same
-                        if (new Regex(@"(?::[^:])|\/").IsMatch(term))
+                        if (Regex.IsMatch(term, @"(?::[^:])|\/"))
                         {
                             var termDefined = defined.ToDictionary(kvp => kvp.Key, kvp => kvp.Value); //clone
                             termDefined[term] = true;
@@ -830,7 +830,7 @@ namespace JsonLd.Normalization
                         mapping["_prefix"] = simpleTerm &&
                             !(mapping.TryGetValue("_termHasColon", out var _termHasColon) &&
                               _termHasColon.Type == JTokenType.Boolean && _termHasColon.Value<bool>()) &&
-                            new Regex(@"[:\/\?#\[\]@]$").IsMatch(id);
+                            Regex.IsMatch(id, @"[:\/\?#\[\]@]$");
                     }
                 }
             }
@@ -1051,7 +1051,7 @@ namespace JsonLd.Normalization
             // term may be used as a prefix
             if (valueObj.TryGetValue("@prefix", out var prefixProp))
             {
-                if (new Regex(@":|\/").IsMatch(term))
+                if (Regex.IsMatch(term, @":|\/"))
                     throw new JsonLdParseException("Invalid JSON-LD syntax; @context @prefix used on a compact IRI term");
                 if (mappingIdProp?.Type == JTokenType.String && Utils.IsKeyword(mappingIdProp.Value<string>()))
                     throw new JsonLdParseException("Invalid JSON-LD syntax; keywords may not be used as prefixes");

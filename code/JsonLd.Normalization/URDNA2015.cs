@@ -314,7 +314,7 @@ namespace JsonLd.Normalization
 
         private static string EscapeQuadValue(string value)
         {
-            return new Regex(@"[""\\\n\r]").Replace(value, m =>
+            return Regex.Replace(value, @"[""\\\n\r]", m =>
                 m.Value switch
                 {
                     "\"" => "\\\"",
