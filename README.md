@@ -22,7 +22,7 @@ await JsonLd.Normalize(File.ReadAllText(fileName));
 ### Run the tests
 
 ```
-$ test .\code\JsonLd.Normalization.Test
+$ dotnet test .\code\JsonLd.Normalization.Test
 ```
 
 ## Contact
