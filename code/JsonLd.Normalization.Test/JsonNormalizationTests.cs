@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using NUnit.Framework;
@@ -18,8 +17,8 @@ namespace JsonLd.Normalization.Test
             var blockcerts_v3_1 = Resources.Get(EmbeddedResourceName.BLOCKCERTS_V3);
             var blockcerts_v3_2 = Resources.Get(EmbeddedResourceName.BLOCKCERTS_V3_ALT);
          
-            var result1 = await JsonLd.Normalize(blockcerts_v3_1);
-            var result2 = await JsonLd.Normalize(blockcerts_v3_2);
+            var result1 = await JsonLdHandler.Normalize(blockcerts_v3_1);
+            var result2 = await JsonLdHandler.Normalize(blockcerts_v3_2);
 
             Assert.NotNull(result1, "Result1 should not be null");
             Assert.NotNull(result2, "Result2 should not be null");
@@ -30,7 +29,7 @@ namespace JsonLd.Normalization.Test
         public async Task DocumentHasher_Blockcerts_v3_Success()
         {
             var blockcerts_v3 = Resources.Get(EmbeddedResourceName.BLOCKCERTS_V3);
-            var result = await JsonLd.Normalize(blockcerts_v3);
+            var result = await JsonLdHandler.Normalize(blockcerts_v3);
             Assert.NotNull(result);
             Assert.True(result.Length > 0);
 
@@ -64,7 +63,7 @@ namespace JsonLd.Normalization.Test
                 string normalized = null;
                 try
                 {
-                    normalized = await JsonLd.Normalize(inputDocument);
+                    normalized = await JsonLdHandler.Normalize(inputDocument);
                 }
                 catch (Exception e)
                 {

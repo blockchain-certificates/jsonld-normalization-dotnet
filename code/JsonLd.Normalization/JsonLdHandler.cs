@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace JsonLd.Normalization
 {
-    public static class JsonLd
+    public static class JsonLdHandler
     {
         /// <summary>
         /// Implements URDNA2015 normalization/canonicalization algorithm based on jsonld.js v5.2.0 implementation, 
