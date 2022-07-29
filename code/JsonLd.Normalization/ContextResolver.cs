@@ -45,18 +45,18 @@ namespace JsonLd.Normalization
 
     public class ContextResolver : IContextResolver
     {
-        private static ConcurrentDictionary<string, (string, string, DateTime)> documentCache = new();
-        private static readonly TimeSpan CACHE_TIMEOUT = TimeSpan.FromMinutes(5);
+        protected static readonly ConcurrentDictionary<string, (string, string, DateTime)> documentCache = new();
+        protected static readonly TimeSpan CACHE_TIMEOUT = TimeSpan.FromMinutes(5);
 
-        const int MAX_CONTEXT_URLS = 10;
-        const int MAX_REDIRECTS = 10;
+        protected const int MAX_CONTEXT_URLS = 10;
+        protected const int MAX_REDIRECTS = 10;
 
-        public async Task<List<ResolvedContext>> Resolve(ExpandContext activeCtx, JToken context, string baseUrl)
+        public virtual async Task<List<ResolvedContext>> Resolve(ExpandContext activeCtx, JToken context, string baseUrl)
         {
             return await Resolve(activeCtx, context, baseUrl, null);
         }
-        public async Task<List<ResolvedContext>> Resolve(ExpandContext activeCtx, JToken context, 
-                                                         string baseUrl, HashSet<object> cycles)
+        public virtual async Task<List<ResolvedContext>> Resolve(ExpandContext activeCtx, JToken context, 
+                                                                 string baseUrl, HashSet<object> cycles)
         {
             cycles ??= new();
 
@@ -102,10 +102,10 @@ namespace JsonLd.Normalization
             return allResolved;
         }
 
-        private Dictionary<string, ResolvedContext> OperationCache = new();
-        private Dictionary<string, Dictionary<string, ResolvedContext>> SharedCache = new();
+        protected readonly Dictionary<string, ResolvedContext> OperationCache = new();
+        protected readonly Dictionary<string, Dictionary<string, ResolvedContext>> SharedCache = new();
 
-        private ResolvedContext Get(string key)
+        protected ResolvedContext Get(string key)
         {
             // get key from per operation cache; no `tag` is used with this cache so
             // any retrieved context will always be the same during a single operation
@@ -121,8 +121,8 @@ namespace JsonLd.Normalization
             return resolved;
         }
 
-        private async Task<List<ResolvedContext>> ResolveRemoteContext(ExpandContext activeCtx, string url,
-                                                                 string baseUrl, HashSet<object> cycles)
+        protected virtual async Task<List<ResolvedContext>> ResolveRemoteContext(ExpandContext activeCtx, string url,
+                                                                                 string baseUrl, HashSet<object> cycles)
         {
             url = Utils.PrependBase(baseUrl, url);
             var (context, docUrl) = await FetchContext(activeCtx, url, cycles);
@@ -138,7 +138,7 @@ namespace JsonLd.Normalization
             return resolved;
         }
 
-        private async Task<(JObject, string)> FetchContext(ExpandContext activeCtx, string url, HashSet<object> cycles)
+        protected virtual async Task<(JObject, string)> FetchContext(ExpandContext activeCtx, string url, HashSet<object> cycles)
         {
             // check for max context URLs fetched during a resolve operation
             if (cycles.Count > MAX_CONTEXT_URLS)
@@ -207,9 +207,9 @@ namespace JsonLd.Normalization
             return (result, docUrl);
         }
 
-        private static Regex JsonContentTypeRegex = new(@"^application\/(\w*\+)?json$");
+        protected static readonly Regex JsonContentTypeRegex = new(@"^application\/(\w*\+)?json$");
 
-        private async Task<(string, string)> LoadDocument(string url, List<string> redirects = null)
+        protected virtual async Task<(string, string)> LoadDocument(string url, List<string> redirects = null)
         {
             redirects ??= new();
             JToken alternate = null;
@@ -270,11 +270,11 @@ namespace JsonLd.Normalization
             return (await res.Content.ReadAsStringAsync(), url);
         }
 
-        private static Regex LinkHeadersRegex = new(@"(?:<[^>] *?>| ""[^""]*?""|[^,])+");
-        private static Regex LinkHeaderRegex = new(@"\s*<([^>]*?)>\s* (?:;\s* (.*))?");
-        private static Regex LinkHeaderParamsRegex = new(@"(.*?)=(?:(?:""([^""]*?)"")| ([^""]*?))\s*(?:(?:;\s*)|$)");
+        protected static readonly Regex LinkHeadersRegex = new(@"(?:<[^>] *?>| ""[^""]*?""|[^,])+");
+        protected static readonly Regex LinkHeaderRegex = new(@"\s*<([^>]*?)>\s* (?:;\s* (.*))?");
+        protected static readonly Regex LinkHeaderParamsRegex = new(@"(.*?)=(?:(?:""([^""]*?)"")| ([^""]*?))\s*(?:(?:;\s*)|$)");
 
-        private JObject ParseLinkHeader(string header)
+        protected JObject ParseLinkHeader(string header)
         {
             JObject rval = new();
             // split on unbracketed/unquoted commas
@@ -308,7 +308,7 @@ namespace JsonLd.Normalization
             return rval;
         }
 
-        private void ResolveContextUrls(JToken context, string baseUrl)
+        protected void ResolveContextUrls(JToken context, string baseUrl)
         {
             if (context?.Type != JTokenType.Object)
                 return;
@@ -353,7 +353,7 @@ namespace JsonLd.Normalization
                 ResolveContextUrls(prop, baseUrl);
         }
 
-        private ResolvedContext CacheResolvedContext(string key, ResolvedContext resolved, string tag = null)
+        protected ResolvedContext CacheResolvedContext(string key, ResolvedContext resolved, string tag = null)
         {
             OperationCache[key] = resolved;
             if (tag is not null)

@@ -3,7 +3,7 @@
     public class ExpandOptions
     {
         private IContextResolver contextResolver;
-        internal IContextResolver ContextResolver
+        public IContextResolver ContextResolver
         {
             get 
             {
