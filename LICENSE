@@ -11,3 +11,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 jsonld.js used and modified under BSD 3-Clause License from Digital Bazaar (https://github.com/digitalbazaar/jsonld.js/blob/v5.2.0/LICENSE)
 rdf-canonize used and modified under BSD 3-Clause License from Digital Bazaar (https://github.com/digitalbazaar/rdf-canonize/blob/v3.0.0/LICENSE)
 canonicalize used and modified under Apache License 2.0 from Samuel Erdtman (https://github.com/erdtman/canonicalize/blob/v1.0.1/LICENSE)
+
+Part of the test files contained in code/JsonLd.Normalization.Test/Resources folder come from JSON-LD 1.1 specification tests (version tagged REC-2020-07-16) on github https://github.com/w3c/json-ld-api/tree/REC-2020-07-16/tests/toRdf
+license: https://www.w3.org/Consortium/Legal/2015/copyright-software-and-document

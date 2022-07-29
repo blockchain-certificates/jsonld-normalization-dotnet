@@ -19,6 +19,16 @@ await JsonLdHandler.Normalize(File.ReadAllText(fileName));
 
 ## Contribute
 
+### Initialize the tests
+
+The expected test data files are generated from input test files with jsonld.js-normalizer/normalize_documents.js. 
+To reinitialize them run the following commands.
+
+```
+$ npm install
+$ node code/jsonld.js-normalizer/normalize_documents.js code/JsonLd.Normalization.Test/Resources/jsonld-canonicalization
+```
+
 ### Run the tests
 
 ```
