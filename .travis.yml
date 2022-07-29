@@ -4,7 +4,10 @@ dotnet: 6.0.302
 env: 
   - SLN_FILE="code/JsonLd.Normalization.sln"
 before_script:
+  - npm ci
   - dotnet restore $SLN_FILE --locked-mode
 script:
   - dotnet build $SLN_FILE --no-restore -c Release
   - dotnet test $SLN_FILE --no-restore --no-build -c Release
+after_success:
+  - npx semantic-release
