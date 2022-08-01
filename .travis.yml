@@ -11,4 +11,14 @@ script:
   - dotnet test $SLN_FILE --no-restore --no-build -c Release
 after_success:
   - nvm install lts/*
-  - npx semantic-release
+  # Decrypt the git_deploy_key.enc key into /tmp/git_deploy_key
+  - openssl aes-256-cbc -K $encrypted_8103693c5a95_key -iv $encrypted_8103693c5a95_iv -in jsonld-normalization-dotnet_travis_sr_rw_ed25519.enc -out /tmp/jsonld-normalization-dotnet_travis_sr_rw_ed25519.dec -d
+  # Make sure only the current user can read the private key
+  - chmod 600 /tmp/jsonld-normalization-dotnet_travis_sr_rw_ed25519.dec
+  # Create a script to return the passphrase environment variable to ssh-add
+  - echo 'echo ${SSH_PASSPHRASE}' > /tmp/askpass && chmod +x /tmp/askpass
+  # Start the authentication agent
+  - eval "$(ssh-agent -s)"
+  # Add the key to the authentication agent
+  - DISPLAY=":0.0" SSH_ASKPASS="/tmp/askpass" setsid ssh-add /tmp/jsonld-normalization-dotnet_travis_sr_rw_ed25519.dec </dev/null
+  - npx semantic-release --branches master
