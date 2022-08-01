@@ -24,4 +24,4 @@ after_success:
   - eval "$(ssh-agent -s)"
   # Add the key to the authentication agent
   - DISPLAY=":0.0" SSH_ASKPASS="/tmp/askpass" setsid ssh-add /tmp/jsonld-normalization-dotnet_travis_sr_rw_ed25519 </dev/null
-  - npx semantic-release --branches master
+  - npx semantic-release --branches master --plugins ['@semantic-release/commit-analyzer', '@semantic-release/release-notes-generator', '@semantic-release/github']
