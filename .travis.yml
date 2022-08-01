@@ -1,8 +1,11 @@
 language: csharp
 mono: none
 dotnet: 6.0.302
-env: 
+env:
+  matrix:
   - SLN_FILE="code/JsonLd.Normalization.sln"
+  global:
+    secure: kCgv6ME25ynrK3/+TQna0dqVOgQcQ2Tdx/73neuagpvCPl35hHNAp2NfWuE3SvOOQWDG5Dp3quDIIV0uWQnoUXYkgq9fSJ1WG+IcXvPtWJbMy6SGEQIfda0VQzai3DIKBwL70P0N87Ny4ZBWleRw2QzC1jctKNIGDixnK0FmMOqovx/rfDSN2ftogmp5pTDtRL0pKc1dK63R48jxVAGEOR8KrhhZLEk37q4OgatmUr0GY/9jmmPHqRuZ+82oeTSWIIKWICt0cq9626/VShCIlX0rc1yzwkxcAHvFd+bdf+wcOMpw1nXlqLh2oHX5CzsO3g1v67cE2uXWg9oCcfXnWOYXrKvgWxcARa/7tsYyMCwI2cFjbjngPBYpoY9KG+QOybmceUck9sLrFAQpcrcRv/+ukiY95KJK3EhI4Gt1ZmvVHIqcJcq/TMRmwE0sHWlkvu59ISs/hflGxwyv2hYELEV/6xdgJocZ5dLTh1a3P6uNg1Mgn6lkkgrJGkQgq/NIiroexmldSjW3kERP0abc8p3itXlqRkoVCgBu5RsJB6e3l74w2YDgLwrAR1jFmy8w3LRhyzkd7PPbKPAiwRAXN25uEVWkZXznLBtmQSwCPFT3ywM9M28oMUn1PeoRGpumNxDcr8rLy9gsDj7j//cpkM+clkFdxBzl5LhSDYeZknw=
 install:
   - npm ci
   - dotnet restore $SLN_FILE --locked-mode
@@ -12,13 +15,13 @@ script:
 after_success:
   - nvm install lts/*
   # Decrypt the git_deploy_key.enc key into /tmp/git_deploy_key
-  - openssl aes-256-cbc -K $encrypted_8103693c5a95_key -iv $encrypted_8103693c5a95_iv -in jsonld-normalization-dotnet_travis_sr_rw_ed25519.enc -out /tmp/jsonld-normalization-dotnet_travis_sr_rw_ed25519.dec -d
+  - openssl aes-256-cbc -k "$token_pass" -in jsonld-normalization-dotnet_travis_sr_rw_ed25519.enc -out /tmp/jsonld-normalization-dotnet_travis_sr_rw_ed25519 -d
   # Make sure only the current user can read the private key
-  - chmod 600 /tmp/jsonld-normalization-dotnet_travis_sr_rw_ed25519.dec
+  - chmod 600 /tmp/jsonld-normalization-dotnet_travis_sr_rw_ed25519
   # Create a script to return the passphrase environment variable to ssh-add
   - echo 'echo ${SSH_PASSPHRASE}' > /tmp/askpass && chmod +x /tmp/askpass
   # Start the authentication agent
   - eval "$(ssh-agent -s)"
   # Add the key to the authentication agent
-  - DISPLAY=":0.0" SSH_ASKPASS="/tmp/askpass" setsid ssh-add /tmp/jsonld-normalization-dotnet_travis_sr_rw_ed25519.dec </dev/null
+  - DISPLAY=":0.0" SSH_ASKPASS="/tmp/askpass" setsid ssh-add /tmp/jsonld-normalization-dotnet_travis_sr_rw_ed25519 </dev/null
   - npx semantic-release --branches master
