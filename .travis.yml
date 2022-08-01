@@ -3,11 +3,12 @@ mono: none
 dotnet: 6.0.302
 env: 
   - SLN_FILE="code/JsonLd.Normalization.sln"
-before_script:
+install:
   - npm ci
   - dotnet restore $SLN_FILE --locked-mode
 script:
   - dotnet build $SLN_FILE --no-restore -c Release
   - dotnet test $SLN_FILE --no-restore --no-build -c Release
 after_success:
+  - nvm install lts/*
   - npx semantic-release
