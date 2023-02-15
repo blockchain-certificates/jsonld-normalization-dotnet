@@ -5,8 +5,9 @@
 	<Company>Hyland</Company>
 	<Authors>Trusted Documents</Authors>
 	<ApplicationIcon />
-	<RepositoryUrl>https://github.com/learningmachine/lib-document-hash-generator</RepositoryUrl>
+	<RepositoryUrl>https://github.com/blockchain-certificates/jsonld-normalization-dotnet</RepositoryUrl>
 	<Version>1.0.1</Version>
+	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
