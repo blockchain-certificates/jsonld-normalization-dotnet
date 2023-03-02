@@ -1,0 +1,44 @@
+name: Build & Test
+
+on:
+  push:
+    branches:
+      - "**" #all branches
+
+  pull_request:
+    branches:
+      - "**" #all branches
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+    
+    - name: Check Out Repo
+      uses: actions/checkout@v2    
+       
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x  
+        
+    - name: Load dependencies cache
+      uses: actions/cache@v2
+      with:
+        path: ~/.nuget/packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget
+          
+    - name: Restore dependencies
+      working-directory: code
+      run: dotnet restore --locked-mode
+      
+    - name: Build
+      working-directory: code
+      run: dotnet build --no-restore -c Release
+      
+    - name: Test
+      working-directory: code
+      run: dotnet test --no-restore --no-build -c Release

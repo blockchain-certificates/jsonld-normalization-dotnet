@@ -1,0 +1,60 @@
+name: Publish NuGet
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        description: 'What version needs to be published? ...(e.g. 1.0.1)'
+        required: true
+        type: string
+
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'What version needs to be published? ...(e.g. 1.0.1)'
+        required: true
+        type: string
+
+env:
+  PACKAGE_OUTPUT: ${{ github.workspace }}/output
+  VERSION: ${{ github.event.inputs.version || inputs.version }}
+  
+jobs:
+  nuget-pack-publish:
+      name: NuGet Pack & Publish
+      runs-on: ubuntu-latest
+      timeout-minutes: 10
+
+      steps:
+      - name: Check Out Repo
+        uses: actions/checkout@v2
+        with:
+            ref: v${{env.VERSION}}
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.x
+
+      - name: Load dependencies cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget
+
+      - name: Restore dependencies
+        working-directory: code
+        run: dotnet restore --locked-mode
+
+      - name: Build
+        working-directory: code
+        run: dotnet build --no-restore -c Release /p:Version=${VERSION}
+
+      - name: Pack
+        working-directory: code
+        run: dotnet pack -c Release /p:Version=${VERSION} --no-build -o ${{env.PACKAGE_OUTPUT}}
+
+      - name: Lib Push
+        run: dotnet nuget push ${{env.PACKAGE_OUTPUT}}/JsonLd.Normalization.${VERSION}.nupkg --api-key ${{ secrets.GITHUB_TOKEN }} --source "https://nuget.pkg.github.com/blockchain-certificates/index.json"

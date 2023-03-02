@@ -1,0 +1,40 @@
+name: Release & Deploy (push)
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-test:
+    name: Build & Test
+    uses: ./.github/workflows/build-test.yml
+
+  semantic-release:
+    name: Semantic Release
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: [build-test]
+    outputs:
+      new-release-version: ${{ steps.semantic.outputs.new_release_version }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+    
+      - name: Semantic Release
+        id: semantic
+        uses: cycjimmy/semantic-release-action@v3
+        with:
+          extra_plugins: |
+            @semantic-release/changelog
+            @semantic-release/git
+          branches: 'main'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  publish-nuget:
+    name: Publish NuGet
+    needs: [semantic-release]
+    if: ${{ needs.semantic-release.outputs.new-release-version != '' }}
+    uses: ./.github/workflows/publish.yml
+    with:
+      version: ${{ needs.semantic-release.outputs.new-release-version }}
