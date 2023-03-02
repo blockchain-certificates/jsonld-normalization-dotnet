@@ -1,4 +1,12 @@
 {
+  "name": "jsonld-normalization-dotnet",
+  "release": {
+	"plugins": [
+	  ["@semantic-release/npm", {
+	    "npmPublish": false
+	  }]
+    ]
+  },
   "devDependencies": {
     "jsonld": "^5.2.0",
     "semantic-release": "^19.0.3"
